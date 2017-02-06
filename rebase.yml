@@ -1,0 +1,19 @@
+---
+- name: Rebase On the Tree
+  hosts: atomichost
+  become: yes
+  become_method: sudo
+
+  tasks:
+  - name: Create remote named my-atomic
+    command:
+      ostree remote add my-atomic http://IP_OF_HTTP_SERVER_RUNNING:35000/repo --no-gpg-verify
+      # IP_OF_HTTP_SERVER_RUNNING = 192.168.121.1
+
+  - name: Rebase on to my tree
+    command:
+      rpm-ostree rebase my-atomic:fedora-atomic/25/x86_64/docker-host
+
+  - name: Perform a reboot
+    command:
+      systemctl reboot
