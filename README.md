@@ -14,6 +14,10 @@ Compose OSTree and Start Http Server
 ```
 $ ansible-playbook compose.yml --ask-sudo-pass
 ```
+A short note here: Do not press `Ctrl+c` because that would stop the HTTP server.
+
+
+Now Open a new terminal session and replace `IP_OF_HTTP_SERVER_RUNNING` with the IP Address of HTTP Server running in [rebase.yml](https://github.com/trishnaguha/build-atomic-host/blob/master/rebase.yml#L10) file. You can use `ip addr` to check the IP Address of the HTTP server.
 
 Create VM from the Atomic QCOW2 image
 
@@ -25,11 +29,10 @@ $ sudo sh create-vm.sh atomic-node /path/to/fedora-atomic25.qcow2
 Set Up Inventory file and Rebase on the OSTree
 
 ```
-$ sh setup_inventory.sh
+$ sh rebase.sh
 ```
 
-Verify
-SSH to the Atomic Host:
+Verify: SSH to the Atomic Host:
 
 ```
 [tguha@dhcp193-94 ~]$ ssh atomic-user@192.168.121.221
