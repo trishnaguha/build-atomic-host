@@ -13,7 +13,3 @@
   - name: Rebase on to my tree
     command:
       rpm-ostree rebase my-atomic:fedora-atomic/25/x86_64/docker-host
-
-  - name: Perform a reboot
-    command:
-      systemctl reboot
