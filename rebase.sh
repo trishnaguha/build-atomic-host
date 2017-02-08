@@ -11,4 +11,4 @@ echo -e "[atomichost]\n$vm_ip ansible_ssh_user=atomic-user ansible_ssh_pass=atom
 
 ssh-copy-id -i ~/.ssh/id_rsa.pub atomic-user@$vm_ip
 
-ansible-playbook rebase.yml --ask-sudo-pass -i inventory
+ansible-playbook rebase.yml --ask-sudo-pass -i inventory --extra-vars "httpserver="

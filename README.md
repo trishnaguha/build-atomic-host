@@ -17,8 +17,14 @@ $ ansible-playbook compose.yml --ask-sudo-pass
 A short note here: Do not press `Ctrl+c` because that would stop the HTTP server.
 
 
-Now Open a new terminal session and replace `IP_OF_HTTP_SERVER_RUNNING` with the IP Address of HTTP Server running in [rebase.yml](https://github.com/trishnaguha/build-atomic-host/blob/master/rebase.yml#L10) file. You can use `ip addr` to check the IP Address of the HTTP server.
+Now Open a new terminal session and Enter IP Address of HTTP Server running in [rebase.sh](https://github.com/trishnaguha/build-atomic-host/blob/master/rebase.sh#L14) file.
+For Instance:
+```
+ansible-playbook rebase.yml --ask-sudo-pass -i inventory --extra-vars "httpserver=192.168.121.1"
+```
+You can use `ip addr` to check the IP Address of the HTTP server.
 
+Download Fedora Atomic QCOW2 Image: [https://getfedora.org/en/atomic](https://getfedora.org/en/atomic/download/).
 Create VM from the Atomic QCOW2 image
 
 ```
