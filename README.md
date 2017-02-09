@@ -38,6 +38,11 @@ Set Up Inventory file and Rebase on the OSTree
 $ sh rebase.sh
 ```
 
+Now SSH to the Atomic Host and Perform a Reboot which will reboot in to your OSTree:
+```
+$ sudo systemctl reboot
+```
+
 Verify: SSH to the Atomic Host:
 
 ```
