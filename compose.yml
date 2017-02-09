@@ -13,6 +13,23 @@
     - libvirt
     - qemu-img
 
+  - name: Query daemon package
+    shell:
+      rpm -q daemon
+    register: result
+
+  - debug: msg="{{ result.stdout }}"
+
+  - name: Download daemon rpm
+    command:
+      wget http://libslack.org/daemon/download/daemon-0.6.4-1.x86_64.rpm
+    when: result|failed
+
+  - name: Install daemon
+    command:
+      rpm --install ./daemon-0.6.4-1.x86_64.rpm
+    when: result|failed
+
   - name: Create directory structure
     file: path={{ item }} state=directory mode=750
     with_items:
@@ -37,5 +54,5 @@
       rpm-ostree compose tree --cachedir=/srv/cache --repo=/srv/repo ./fedora-atomic-docker-host.json
 
   - name: Running Http server at Port 35000, Use `ip addr` to check the IP Address...
-    command:
-      ostree trivial-httpd -P 35000 --log-file - /srv
+    shell:
+      /usr/local/bin/daemon -- ostree trivial-httpd -P 35000 --log-file - /srv
