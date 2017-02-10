@@ -1,0 +1,15 @@
+---
+- name: Install the list of required packages
+  package: name={{ item }} state=installed
+  with_items:
+  - git
+  - rpm-ostree
+  - libvirt
+  - qemu-img
+
+- name: Download daemon rpm and Install
+  command: "{{ item }}"
+  with_items:
+    - wget -P /tmp http://libslack.org/daemon/download/daemon-0.6.4-1.x86_64.rpm
+    - rpm --install /tmp/daemon-0.6.4-1.x86_64.rpm
+  ignore_errors: yes

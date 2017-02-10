@@ -1,0 +1,10 @@
+---
+- name: Main Playbook
+  hosts: localhost
+  become: yes
+  become_method: sudo
+
+  tasks:
+  - include: requirements.yml
+  - include: compose.yml
+  - include: ssh-setup.yml
