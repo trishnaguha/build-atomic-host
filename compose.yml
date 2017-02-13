@@ -1,4 +1,5 @@
 ---
+# This playbook composes OSTree
 - name: Create directory structure
   file: path={{ item }} state=directory mode=750
   with_items:

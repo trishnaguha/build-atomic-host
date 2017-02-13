@@ -1,4 +1,5 @@
 ---
+# This playbook installs requirements
 - name: Install the list of required packages
   package: name={{ item }} state=installed
   with_items:
