@@ -1,3 +1,5 @@
+# Credit to jlebon https://github.com/jlebon
+# Slides: http://jlebon.com/devconf/slides.pdf
 #!/bin/bash
 set -euo pipefail
 
