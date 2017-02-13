@@ -9,20 +9,6 @@ $ git clone https://github.com/trishnaguha/build-atomic-host.git
 $ cd build-atomic-host
 ```
 
-Compose OSTree and Start Http Server
-
-```
-$ ansible-playbook compose.yml --ask-sudo-pass
-```
-A short note here: Do not press `Ctrl+c` because that would stop the HTTP server.
-
-
-Now Open a new terminal session and Enter IP Address of HTTP Server running in [rebase.sh](https://github.com/trishnaguha/build-atomic-host/blob/master/rebase.sh#L14) file.
-For Instance:
-```
-ansible-playbook rebase.yml --ask-sudo-pass -i inventory --extra-vars "httpserver=192.168.121.1"
-```
-You can use `ip addr` to check the IP Address of the HTTP server.
 
 Download Fedora Atomic QCOW2 Image: [https://getfedora.org/en/atomic](https://getfedora.org/en/atomic/download/).
 Create VM from the Atomic QCOW2 image
@@ -32,10 +18,17 @@ $ sudo sh create-vm.sh atomic-node /path/to/fedora-atomic25.qcow2
 # /path/to/fedora-atomic25.qcow2 = /var/lib/libvirt/images/Fedora-Atomic-25-20170131.0.x86_64.qcow2
 ```
 
-Set Up Inventory file and Rebase on the OSTree
-
+Run the main Playbook which will install the requirements, compose OSTree and perform SSH-Setup:
 ```
-$ sh rebase.sh
+$ ansible-playbook main.yml --ask-sudo-pass
+```
+
+Rebase on the OSTree:
+
+Run this playbook. Use IP Address of your HTTP Server to `httpserver`.
+You can use `ip addr` to check the IP Address of the HTTP server.
+```
+$ ansible-playbook rebase.yml --ask-sudo-pass -i inventory --extra-vars "httpserver=192.168.121.1"
 ```
 
 Now SSH to the Atomic Host and Perform a Reboot which will reboot in to your OSTree:

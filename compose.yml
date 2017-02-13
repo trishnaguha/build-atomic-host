@@ -1,58 +1,27 @@
 ---
-- name: Compose OSTree
-  hosts: localhost
-  become: yes
-  become_method: sudo
+- name: Create directory structure
+  file: path={{ item }} state=directory mode=750
+  with_items:
+  - "/srv/repo"
+  - "/srv/cache"
+  - "/workspace"
 
-  tasks:
-  - name: Install the list of required packages
-    package: name={{ item }} state=installed
-    with_items:
-    - git
-    - rpm-ostree
-    - libvirt
-    - qemu-img
+- name: Initialize OSTree repository
+  command:
+    ostree --repo=/srv/repo init --mode=archive
 
-  - name: Query daemon package
-    shell:
-      rpm -q daemon
-    register: result
+- name: Clone Fedora-Atomic buildscripts
+  git:
+    repo=https://pagure.io/fedora-atomic.git
+    version=f25
+    depth=1
+    dest=/workspace/fedora-atomic
 
-  - debug: msg="{{ result.stdout }}"
+- name: Compose Fedora-Atomic Tree
+  command:
+    chdir=/workspace/fedora-atomic
+    rpm-ostree compose tree --cachedir=/srv/cache --repo=/srv/repo ./fedora-atomic-docker-host.json
 
-  - name: Download daemon rpm
-    command:
-      wget http://libslack.org/daemon/download/daemon-0.6.4-1.x86_64.rpm
-    when: result|failed
-
-  - name: Install daemon
-    command:
-      rpm --install ./daemon-0.6.4-1.x86_64.rpm
-    when: result|failed
-
-  - name: Create directory structure
-    file: path={{ item }} state=directory mode=750
-    with_items:
-    - "/srv/repo"
-    - "/srv/cache"
-    - "/workspace"
-
-  - name: Initialize OSTree repository
-    command:
-      ostree --repo=/srv/repo init --mode=archive
-
-  - name: Clone Fedora-Atomic buildscripts
-    git:
-      repo=https://pagure.io/fedora-atomic.git
-      version=f25
-      depth=1
-      dest=/workspace/fedora-atomic
-
-  - name: Compose Fedora-Atomic Tree
-    command:
-      chdir=/workspace/fedora-atomic
-      rpm-ostree compose tree --cachedir=/srv/cache --repo=/srv/repo ./fedora-atomic-docker-host.json
-
-  - name: Running Http server at Port 35000, Use `ip addr` to check the IP Address...
-    shell:
-      /usr/local/bin/daemon -- ostree trivial-httpd -P 35000 --log-file - /srv
+- name: Running Http server at Port 35000, Use `ip addr` to check the IP Address...
+  shell:
+    /usr/local/bin/daemon -- ostree trivial-httpd -P 35000 --log-file - /srv
