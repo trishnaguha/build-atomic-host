@@ -11,8 +11,8 @@
   - include: compose.yml
 
   - name: Wait for 10s to Get the IP
-    pause:
-      seconds: 10
+    wait_for:
+      timeout: 10
 
   - name: Get the IP
     shell: virsh domifaddr atomic-node | tail -2| awk '{print $4}' | cut -d/ -f1

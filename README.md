@@ -15,7 +15,7 @@ Create VM from the Atomic QCOW2 image
 
 ```
 $ sudo sh create-vm.sh atomic-node /path/to/fedora-atomic25.qcow2
-For example # /path/to/fedora-atomic25.qcow2 = /var/lib/libvirt/images/Fedora-Atomic-25-20170131.0.x86_64.qcow2
+# For example: /var/lib/libvirt/images/Fedora-Atomic-25-20170131.0.x86_64.qcow2
 ```
 
 **Replace the Variables in `vars/atomic.yml` with your httpserver IP Address and OSTree name.**
@@ -35,7 +35,7 @@ $ sudo systemctl reboot
 Verify: SSH to the Atomic Host:
 
 ```
-[tguha@dhcp193-94 ~]$ ssh atomic-user@192.168.122.221
+$ ssh atomic-user@192.168.122.221
 [atomic-user@atomic-node ~]$ sudo rpm-ostree status
 State: idle
 Deployments:
@@ -49,3 +49,8 @@ Deployments:
         Commit: f294635a1dc62d9ae52151a5fa897085cac8eaa601c52e9a4bc376e9ecee11dd
         OSName: fedora-atomic
 ```
+
+## Shout-Out for the following folks:
+
+[Gerard Braad](https://twitter.com/gbraad) who mentored me for the project.
+[Jonathon Lebon](https://github.com/jlebon) who demonstrated Building Atomic host workshop in DevConf.CZ, 2017 at Brno. His slides are here: [jlebon-devconf-slides](http://jlebon.com/devconf/slides.pdf).
