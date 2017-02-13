@@ -15,21 +15,17 @@ Create VM from the Atomic QCOW2 image
 
 ```
 $ sudo sh create-vm.sh atomic-node /path/to/fedora-atomic25.qcow2
-# /path/to/fedora-atomic25.qcow2 = /var/lib/libvirt/images/Fedora-Atomic-25-20170131.0.x86_64.qcow2
+For example # /path/to/fedora-atomic25.qcow2 = /var/lib/libvirt/images/Fedora-Atomic-25-20170131.0.x86_64.qcow2
 ```
 
-Run the main Playbook which will install the requirements, compose OSTree and perform SSH-Setup:
+**Replace the Variables in `vars/atomic.yml` with your httpserver IP Address and OSTree name.**
+
+
+Run the main Playbook which will install the requirements, compose OSTree and perform SSH-Setup and Rebase on OSTree:
 ```
 $ ansible-playbook main.yml --ask-sudo-pass
 ```
 
-Rebase on the OSTree:
-
-Run this playbook. Use IP Address of your HTTP Server to `httpserver`.
-You can use `ip addr` to check the IP Address of the HTTP server.
-```
-$ ansible-playbook rebase.yml --ask-sudo-pass -i inventory --extra-vars "httpserver=192.168.121.1"
-```
 
 Now SSH to the Atomic Host and Perform a Reboot which will reboot in to your OSTree:
 ```
@@ -39,7 +35,7 @@ $ sudo systemctl reboot
 Verify: SSH to the Atomic Host:
 
 ```
-[tguha@dhcp193-94 ~]$ ssh atomic-user@192.168.121.221
+[tguha@dhcp193-94 ~]$ ssh atomic-user@192.168.122.221
 [atomic-user@atomic-node ~]$ sudo rpm-ostree status
 State: idle
 Deployments:

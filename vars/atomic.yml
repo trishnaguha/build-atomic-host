@@ -1,0 +1,4 @@
+---
+# Variables for Atomic host
+atomicname: my-atomic
+httpserver: 192.168.122.1

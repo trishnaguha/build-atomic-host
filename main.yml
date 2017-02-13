@@ -1,4 +1,6 @@
 ---
+# This Playbook installs requirements and Compose OSTree, Performs SSH Setup and Rebase on Own OSTree
+
 - name: Main Playbook
   hosts: localhost
   become: yes
@@ -7,4 +9,37 @@
   tasks:
   - include: requirements.yml
   - include: compose.yml
-  - include: ssh-setup.yml
+
+  - name: Wait for 10s to Get the IP
+    pause:
+      seconds: 10
+
+  - name: Get the IP
+    shell: virsh domifaddr atomic-node | tail -2| awk '{print $4}' | cut -d/ -f1
+    register: vm_ip
+
+  - debug: msg="{{ vm_ip.stdout }}"
+
+  - name: ssh-copy-id to the Atomic host
+    shell: ssh-copy-id -i ~/.ssh/id_rsa.pub atomic-user@$"{{ vm_ip.stdout }}"
+
+  - name: Add IP to atomichost group
+    add_host: hostname="{{ vm_ip.stdout }}" groupname=atomichost ansible_ssh_user=atomic-user
+
+
+- name: Rebase OSTree
+  hosts: atomichost
+  become: yes
+  become_method: sudo
+
+  vars_files:
+    - vars/atomic.yml
+
+  tasks:
+  - name: Create remote named {{ atomicname }}
+    command:
+      ostree remote add "{{ atomicname }}" http://"{{ httpserver }}":35000/repo --no-gpg-verify
+
+  - name: Rebase on my tree
+    command:
+      rpm-ostree rebase "{{ atomicname }}":fedora-atomic/25/x86_64/docker-host
