@@ -3,10 +3,12 @@
 - name: Install the list of required packages
   package: name={{ item }} state=installed
   with_items:
+  - genisoimage
   - git
-  - rpm-ostree
   - libvirt
   - qemu-img
+  - rpm-ostree
+  - virt-install
 
 - name: Download daemon rpm and Install
   command: "{{ item }}"

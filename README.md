@@ -9,6 +9,11 @@ $ git clone https://github.com/trishnaguha/build-atomic-host.git
 $ cd build-atomic-host
 ```
 
+Please Make sure Ansible is intalled in your system.
+```
+$ sudo dnf install ansible
+```
+
 
 Download Fedora Atomic QCOW2 Image: [https://getfedora.org/en/atomic](https://getfedora.org/en/atomic/download/).
 Create VM from the Atomic QCOW2 image
@@ -32,7 +37,7 @@ Now SSH to the Atomic Host and Perform a Reboot which will reboot in to your OST
 $ sudo systemctl reboot
 ```
 
-Verify: SSH to the Atomic Host:
+## Verify: SSH to the Atomic Host:
 
 ```
 $ ssh atomic-user@192.168.122.221
