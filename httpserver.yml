@@ -1,0 +1,23 @@
+---
+# This playbook initializes OSTree and starts HTTP server
+
+- name: Creates Directory Structure - Initilizes OStree - Starts HTTP Server
+  hosts: localhost
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: Create directory structure
+      file: path={{ item }} state=directory mode=750
+      with_items:
+        - "/srv/repo"
+        - "/srv/cache"
+        - "/workspace"
+
+    - name: Initialize OSTree repository
+      command:
+        ostree --repo=/srv/repo init --mode=archive
+
+    - name: Running HTTP server at Port 35000, Use `ip addr` to check the IP Address...
+      shell:
+        /usr/local/bin/daemon -- ostree trivial-httpd -P 35000 --log-file - /srv
