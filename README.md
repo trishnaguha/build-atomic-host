@@ -63,4 +63,4 @@ Deployments:
 ## Shout-Out for the following folks:
 
 * [Gerard Braad](https://gbraad.nl) who mentored me for the project.
-* [Jonathon Lebon](https://github.com/jlebon) who demonstrated Building Atomic host workshop in DevConf.CZ, 2017 at Brno. His slides are here: [jlebon-devconf-slides](http://jlebon.com/devconf/slides.pdf).
+* [Jonathan Lebon](https://github.com/jlebon) who demonstrated Building Atomic host workshop in DevConf.CZ, 2017 at Brno. His slides are here: [jlebon-devconf-slides](http://jlebon.com/devconf/slides.pdf).
