@@ -6,6 +6,9 @@
   become: yes
   become_method: sudo
 
+  vars_files:
+    - vars/buildrepo.yml
+
   tasks:
     - include: requirements.yml
 
@@ -14,7 +17,7 @@
       with_items:
         - "/srv/repo"
         - "/srv/cache"
-        - "/workspace"
+        - "{{ abs_path }}"
 
     - name: Initialize OSTree repository
       command:

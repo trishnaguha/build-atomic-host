@@ -1,13 +1,30 @@
 ---
 # This playbook composes OSTree
+
+- include_vars:
+    file: vars/buildrepo.yml
+
 - name: Clone Fedora-Atomic buildscripts
   git:
-    repo=https://pagure.io/fedora-atomic.git
-    version=f25
+    repo={{ repo }}
+    version={{ branch }}
     depth=1
-    dest=/workspace/fedora-atomic
+    dest={{ abs_path }}/{{ repodir }}
+
+- name: Create JSON file for adding packages
+  file:
+    path: '{{ abs_path }}/{{ repodir }}/{{ custommanifest }}'
+    state: touch
+
+- name: Template render for customized packages
+  template:
+    src: ./templates/customized-packages-template.j2
+    dest: '{{ abs_path}}/{{ repodir }}/{{ custommanifest }}'
+    owner: root
+    group: root
+    mode: 0700
 
 - name: Compose Fedora-Atomic Tree
   command:
-    chdir=/workspace/fedora-atomic
-    rpm-ostree compose tree --cachedir=/srv/cache --repo=/srv/repo ./fedora-atomic-docker-host.json
+    chdir='{{ abs_path}}/{{ repodir }}'
+    rpm-ostree compose tree --cachedir=/srv/cache --repo=/srv/repo ./{{ custommanifest }}

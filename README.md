@@ -21,7 +21,33 @@ Install Requirements - Start HTTP Server. After running the following playbook y
 $ ansible-playbook setup.yml --ask-sudo-pass
 ```
 
-**Replace the Variables in `vars/atomic.yml` with your httpserver IP Address and OSTree name.**
+**Replace the Variables in `vars/atomic.yml` with your httpserver IP Address, OSTree name, Basehost.**
+
+**If you wish to use CentOS Atomic modify the variables accordingly.**
+
+```
+---
+# Variables for Atomic host
+atomicname: my-atomic
+basehost: fedora-atomic/25/x86_64/docker-host
+httpserver: 192.168.122.1
+```
+
+**Add the additional Packages you would like to have in the OSTree in `vars/buildrepo.yml`.**
+
+**If you wish to use CentOS Atomic modify the variables accordingly.**
+
+```
+---
+repo: https://pagure.io/fedora-atomic.git
+branch: f25
+repodir: fedora-atomic
+abs_path: /workspace                                  # The absolute path to the git repo.
+custommanifest: customized-atomic-docker-host.json    # The manifest that goes into the custom host(ostree) content that we are going to build.
+sourcemanifest: fedora-atomic-docker-host.json        # The manifest that goes into the actual Base Fedora host(ostree) content.
+packages: '"vim-enhanced", "git"'                     # Packages you want to have in your Atomic host.
+```
+You can add packages like above in double-qoutes separated by comma.
 
 
 Run the main Playbook which will create VM from QCOW2 image, compose OSTree and perform SSH-Setup and Rebase on OSTree:

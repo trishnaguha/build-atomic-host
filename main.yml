@@ -42,4 +42,4 @@
 
   - name: Rebase on my tree
     command:
-      rpm-ostree rebase "{{ atomicname }}":fedora-atomic/25/x86_64/docker-host
+      rpm-ostree rebase "{{ atomicname }}":"{{ basehost }}"

@@ -1,4 +1,5 @@
 ---
 # Variables for Atomic host
 atomicname: my-atomic
+basehost: fedora-atomic/25/x86_64/docker-host
 httpserver: 192.168.122.1
