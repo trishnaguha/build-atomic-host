@@ -1,12 +1,14 @@
 ---
 # This playbook initializes OSTree and starts HTTP server
 
-- name: Creates Directory Structure - Initilizes OStree - Starts HTTP Server
+- name: Creates Directory Structure - Installs requirements - Initilizes OStree - Starts HTTP Server
   hosts: localhost
   become: yes
   become_method: sudo
 
   tasks:
+    - include: requirements.yml
+
     - name: Create directory structure
       file: path={{ item }} state=directory mode=750
       with_items:

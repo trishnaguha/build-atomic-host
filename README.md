@@ -23,9 +23,9 @@ $ sudo sh create-vm.sh atomic-node /path/to/fedora-atomic25.qcow2
 # For example: /var/lib/libvirt/images/Fedora-Atomic-25-20170131.0.x86_64.qcow2
 ```
 
-Start HTTP Server. After running the following playbook you may use `ip addr` to check the IP Address of your HTTP server.
+Install Requirements - Start HTTP Server. After running the following playbook you may use `ip addr` to check the IP Address of your HTTP server.
 ```
-$ ansible-playbook httpserver.yml --ask-sudo-pass
+$ ansible-playbook setup.yml --ask-sudo-pass
 ```
 
 **Replace the Variables in `vars/atomic.yml` with your httpserver IP Address and OSTree name.**
