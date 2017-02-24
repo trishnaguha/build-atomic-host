@@ -7,7 +7,6 @@
   become_method: sudo
 
   tasks:
-  - include: requirements.yml
   - include: compose.yml
 
   - name: Wait for 10s to Get the IP
