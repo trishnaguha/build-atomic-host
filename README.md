@@ -31,7 +31,7 @@ $ ansible-playbook setup.yml --ask-sudo-pass
 **Replace the Variables in `vars/atomic.yml` with your httpserver IP Address and OSTree name.**
 
 
-Run the main Playbook which will install the requirements, compose OSTree and perform SSH-Setup and Rebase on OSTree:
+Run the main Playbook which will compose OSTree and perform SSH-Setup and Rebase on OSTree:
 ```
 $ ansible-playbook main.yml --ask-sudo-pass
 ```
