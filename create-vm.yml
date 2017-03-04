@@ -1,0 +1,70 @@
+---
+# This playbook creates VM from the QCOW2 Image
+
+- include_vars:
+    file: vars/guests.yml
+
+- name: Start libvirtd
+  service: name=libvirtd state=started enabled=yes
+  register: libvirtd
+
+- name: Wait for libvirtd to start
+  wait_for:
+    timeout: 30
+  when: libvirtd.changed
+
+- name: Create tmpdir for cloud-init
+  shell:
+    mktemp -d
+  register: tmpdir
+
+- debug: msg="{{ tmpdir.stdout }}"
+
+- name: Create cloud-init meta-data and user-data destinations
+  file: path={{ item }} state=touch
+  with_items:
+    - '{{ tmpdir.stdout }}/meta-data'
+    - '{{ tmpdir.stdout }}/user-data'
+
+- name: cloud-init meta-data
+  lineinfile: dest='{{ tmpdir.stdout }}/meta-data' line='instance-id{{':'}} "{{ domain }}"\nlocal-hostname{{':'}} "{{ domain }}"'
+
+- name: cloud-init user-data
+  lineinfile: dest='{{ tmpdir.stdout }}/user-data' line='#cloud-config\nuser{{':'}} atomic-user\npassword{{':'}} atomic\nchpasswd{{':'}} {expire{{':'}} False}\nssh_pwauth{{':'}} True'
+
+- name: Create qcow2 file for the instance
+  file:
+    path: /var/lib/libvirt/images/{{ domain }}.qcow2
+    state: touch
+
+- name: Create iso file for the instance
+  file:
+    path: /var/lib/libvirt/images/{{ domain }}.cidata.iso
+    state: touch
+
+- name: Copy qcow2 image to the instance qcow2
+  copy:
+    src: '{{ path }}/{{ image }}.qcow2'
+    dest: /var/lib/libvirt/images/{{ domain }}.qcow2
+
+- name: Create a cloud-init metadata ISO Image
+  shell: genisoimage 
+         -input-charset default 
+         -output /var/lib/libvirt/images/{{ domain }}.cidata.iso
+         -volid cidata
+         -joliet
+         -rock
+         -quiet
+         {{ tmpdir.stdout }}/user-data
+         {{ tmpdir.stdout }}/meta-data
+
+- name: Create VM from QCOW2
+  shell: virt-install --quiet --import --name={{ domain }}
+         --os-variant={{ os.variant }} --ram={{ mem }} --vcpus={{ cpu }} 
+         --disk path=/var/lib/libvirt/images/{{ domain }}.qcow2,format=qcow2,bus=virtio 
+         --disk path=/var/lib/libvirt/images/{{ domain }}.cidata.iso,device=cdrom,readonly=on 
+         --network network=default --noautoconsole
+
+- name: Make sure that the VM is running
+  virt: name={{ domain }} command=start
+  ignore_errors: yes

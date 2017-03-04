@@ -1,0 +1,12 @@
+---
+# This playbook contains variables required for Creating VM
+
+# Variables for Creating VM
+
+domain: atomic-node
+image: Fedora-Atomic-25-20170215.1.x86_64
+cpu: 1
+mem: 1536
+os:
+  variant: fedora23
+path: /tmp
