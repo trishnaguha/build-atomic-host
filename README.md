@@ -13,15 +13,8 @@ Please Make sure Ansible is intalled in your system.
 ```
 $ sudo dnf install ansible
 ```
-
-
 Download Fedora Atomic QCOW2 Image: [https://getfedora.org/en/atomic](https://getfedora.org/en/atomic/download/).
-Create VM from the Atomic QCOW2 image
 
-```
-$ sudo sh create-vm.sh atomic-node /path/to/fedora-atomic25.qcow2
-# For example: /var/lib/libvirt/images/Fedora-Atomic-25-20170131.0.x86_64.qcow2
-```
 
 Install Requirements - Start HTTP Server. After running the following playbook you may use `ip addr` to check the IP Address of your HTTP server.
 ```
@@ -31,10 +24,12 @@ $ ansible-playbook setup.yml --ask-sudo-pass
 **Replace the Variables in `vars/atomic.yml` with your httpserver IP Address and OSTree name.**
 
 
-Run the main Playbook which will compose OSTree and perform SSH-Setup and Rebase on OSTree:
+Run the main Playbook which will create VM from QCOW2 image, compose OSTree and perform SSH-Setup and Rebase on OSTree:
 ```
 $ ansible-playbook main.yml --ask-sudo-pass
 ```
+**`user-name: atomic-user, password: atomic` for the instance.**
+
 
 
 Now SSH to the Atomic Host and Perform a Reboot which will reboot in to your OSTree:
