@@ -27,10 +27,20 @@
     - '{{ tmpdir.stdout }}/user-data'
 
 - name: cloud-init meta-data
-  lineinfile: dest='{{ tmpdir.stdout }}/meta-data' line='instance-id{{':'}} "{{ domain }}"\nlocal-hostname{{':'}} "{{ domain }}"'
+  template:
+    src: ./templates/meta-data.j2
+    dest: '{{ tmpdir.stdout }}/meta-data'
+    owner: root
+    group: root
+    mode: 0700
 
 - name: cloud-init user-data
-  lineinfile: dest='{{ tmpdir.stdout }}/user-data' line='#cloud-config\nuser{{':'}} atomic-user\npassword{{':'}} atomic\nchpasswd{{':'}} {expire{{':'}} False}\nssh_pwauth{{':'}} True'
+  template:
+    src: ./templates/user-data.j2
+    dest: '{{ tmpdir.stdout }}/user-data'
+    owner: root
+    group: root
+    mode: 0700
 
 - name: Create qcow2 file for the instance
   file:
