@@ -6,8 +6,10 @@
   - genisoimage
   - git
   - libvirt
+  - libselinux-python
   - qemu-img
   - rpm-ostree
+  - ostree
   - virt-install
 
 - name: Download daemon rpm and Install
