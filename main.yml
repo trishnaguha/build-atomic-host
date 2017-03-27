@@ -6,25 +6,26 @@
   become: yes
   become_method: sudo
 
-  vars:
-    username: "{{ lookup('env', 'USERNAME') }}"
-
   tasks:
   - include: create-vm.yml
   - include: compose.yml
 
-  - name: Wait for 10s to Get the IP
+  - name: Wait for 10s to retrieve the IP
     wait_for:
       timeout: 10
 
-  - name: Get the IP
+  - name: Retrieve the IP
     shell: virsh domifaddr atomic-node | tail -2| awk '{print $4}' | cut -d/ -f1
     register: vm_ip
 
   - debug: msg="{{ vm_ip.stdout }}"
 
+  - name: Retrieve Absolute path for SSH public key
+    shell: getent passwd 1000 | cut -d {{':'}} -f 6
+    register: abs_dest
+
   - name: ssh-copy-id to the Atomic host
-    shell: ssh-copy-id -i /home/"{{ username }}"/.ssh/id_rsa.pub atomic-user@$"{{ vm_ip.stdout }}"
+    shell: ssh-copy-id -i "{{ abs_dest.stdout }}"/.ssh/id_rsa.pub atomic-user@$"{{ vm_ip.stdout }}"
 
   - name: Add IP to atomichost group
     add_host: hostname="{{ vm_ip.stdout }}" groupname=atomichost ansible_ssh_user=atomic-user
