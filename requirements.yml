@@ -4,7 +4,6 @@
   package: name={{ item }} state=installed
   with_items:
   - genisoimage
-  - git
   - libvirt
   - libselinux-python
   - qemu-img
