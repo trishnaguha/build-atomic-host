@@ -25,4 +25,4 @@
 
     - name: Running HTTP server at Port 35000, Use `ip addr` to check the IP Address...
       shell:
-        /usr/local/bin/daemon -- ostree trivial-httpd -P 35000 --log-file - /srv
+        /usr/local/bin/daemon -- python -m SimpleHTTPServer 35000 --log-file - /srv
